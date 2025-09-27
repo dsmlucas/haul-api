@@ -22,12 +22,20 @@ export class CreateVehiclesTable1759002135956 implements MigrationInterface {
     await queryRunner.query(
       `CREATE INDEX "IDX_38bd4d6437d6bcdee1b14af034" ON "vehicles" ("type") `,
     )
+
+    await queryRunner.query(
+      `CREATE INDEX "IDX_80f3b0409e6056f1d4abdf6579" ON "vehicles" ("license_number") `,
+    )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `DROP INDEX "public"."IDX_38bd4d6437d6bcdee1b14af034"`,
     )
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_80f3b0409e6056f1d4abdf6579"`,
+    )
+
     await queryRunner.query(`DROP TABLE "vehicles"`)
   }
 }

@@ -17,6 +17,7 @@ export enum VehicleType {
 
 @Entity({ name: 'vehicles' })
 @Index(['type'])
+@Index(['licenseNumber'])
 export class Vehicle extends AbstractEntity {
   @Column({ length: 255 })
   vin: string
