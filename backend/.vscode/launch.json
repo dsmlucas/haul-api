@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Tests: attach to Node.js debug",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/**/node_modules/**/*.js"
+      ],
+      "type": "node",
+      "smartStep": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "restart": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Docker: attach to Node.js debug",
+      "address": "localhost",
+      "port": 9229,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "restart": true
+    }
+  ]
+}
