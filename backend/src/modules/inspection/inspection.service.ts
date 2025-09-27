@@ -6,14 +6,14 @@ import { parseStringPromise } from 'xml2js'
 
 import { BaseService } from '~/common/base.service'
 
-import { Inpection } from './entities/inpection.entity'
+import { Inspection } from './entities/inspection.entity'
 import { IXmlData } from './inspection.interface'
 
 @Injectable()
-export class InpectionService extends BaseService<Inpection> {
+export class InspectionService extends BaseService<Inspection> {
   constructor(
-    @InjectRepository(Inpection)
-    private readonly inpectionRepository: Repository<Inpection>,
+    @InjectRepository(Inspection)
+    private readonly inpectionRepository: Repository<Inspection>,
   ) {
     super(inpectionRepository)
   }

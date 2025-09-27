@@ -14,12 +14,12 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { XmlValidationPipe } from '~/common/pipes/xml-validation.pipe'
 import { multerOptions } from '~/config/multer.config'
 
-import { UpdateInpectionDto } from './dto/update-inpection.dto'
-import { InpectionService } from './inpection.service'
+import { UpdateInspectionDto } from './dto/update-inspection.dto'
+import { InspectionService } from './inspection.service'
 
 @Controller('inspections')
-export class InpectionController {
-  constructor(private readonly inpectionService: InpectionService) {}
+export class InspectionController {
+  constructor(private readonly inpectionService: InspectionService) {}
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', multerOptions))
@@ -40,7 +40,7 @@ export class InpectionController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() updateInpectionDto: UpdateInpectionDto,
+    @Body() updateInpectionDto: UpdateInspectionDto,
   ) {
     return this.inpectionService.update(id, updateInpectionDto)
   }

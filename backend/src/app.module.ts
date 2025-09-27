@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 
 import { configModule, typeOrmModule } from '~/config/modules.config'
 
-import { InpectionModule } from './modules/inpection/inpection.module'
+import { InspectionModule } from './modules/inspection/inspection.module'
 import { VehicleModule } from './modules/vehicle/vehicle.module'
 import { ViolationModule } from './modules/violation/violation.module'
 
@@ -10,7 +10,7 @@ import { ViolationModule } from './modules/violation/violation.module'
   imports: [
     configModule,
     typeOrmModule,
-    InpectionModule,
+    InspectionModule,
     VehicleModule,
     ViolationModule,
   ],
