@@ -24,7 +24,7 @@ export class InpectionController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async upload(@UploadedFile(XmlValidationPipe) file: Express.Multer.File) {
-    await this.inpectionService.create(file)
+    await this.inpectionService.upload(file)
   }
 
   @Get()
