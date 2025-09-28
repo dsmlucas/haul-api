@@ -15,8 +15,9 @@ export class CreateInspectionsTable1759008577574 implements MigrationInterface {
         "report_number" character varying(255) NOT NULL,
         "level" integer NOT NULL,
         "time_weight" integer NOT NULL,
-        "placarable_hm_veh_insp" character varying(5) NOT NULL,
+        "placarable_hm_veh_insp" character varying(5) NOT NULL, 
         "hm_inspection" character varying(5) NOT NULL,
+        CONSTRAINT "UQ_921539a8b30ce9e95b59a16df8a" UNIQUE ("report_number"),
         CONSTRAINT "PK_a484980015782324454d8c88abe" PRIMARY KEY ("id")
       )`,
     )

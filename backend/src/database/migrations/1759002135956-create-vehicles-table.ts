@@ -13,18 +13,20 @@ export class CreateVehiclesTable1759002135956 implements MigrationInterface {
         "vin" character varying(255) NOT NULL,
         "type" character varying(255) NOT NULL,
         "license_state" character varying(2) NOT NULL,
-        "license_number" character varying(2) NOT NULL,
-        CONSTRAINT "UQ_80f3b0409e6056f1d4abdf6579d" UNIQUE ("license_number"),
+        "license_number" character varying(20) NOT NULL,
         CONSTRAINT "PK_18d8646b59304dce4af3a9e35b6" PRIMARY KEY ("id")
       )`,
     )
-
     await queryRunner.query(
-      `CREATE INDEX "IDX_38bd4d6437d6bcdee1b14af034" ON "vehicles" ("type") `,
+      `CREATE UNIQUE INDEX "IDX_582fbbce376dac0832bcfd09fe" ON "vehicles" ("vin",
+      "license_number",
+      "type") `,
     )
-
     await queryRunner.query(
       `CREATE INDEX "IDX_80f3b0409e6056f1d4abdf6579" ON "vehicles" ("license_number") `,
+    )
+    await queryRunner.query(
+      `CREATE INDEX "IDX_38bd4d6437d6bcdee1b14af034" ON "vehicles" ("type") `,
     )
   }
 
@@ -35,7 +37,9 @@ export class CreateVehiclesTable1759002135956 implements MigrationInterface {
     await queryRunner.query(
       `DROP INDEX "public"."IDX_80f3b0409e6056f1d4abdf6579"`,
     )
-
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_582fbbce376dac0832bcfd09fe"`,
+    )
     await queryRunner.query(`DROP TABLE "vehicles"`)
   }
 }

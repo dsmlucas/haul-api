@@ -1,6 +1,7 @@
-import { Column, Entity, Index } from 'typeorm'
+import { Column, Entity, Index, JoinTable, ManyToMany } from 'typeorm'
 
 import { AbstractEntity } from '~/common/abstract.entity'
+import { Vehicle } from '~/modules/vehicle/entities/vehicle.entity'
 
 @Entity({ name: 'inspections' })
 @Index(['inspectionDate'])
@@ -12,7 +13,7 @@ export class Inspection extends AbstractEntity {
   @Column({ length: 2 })
   reportState: string
 
-  @Column({ length: 255 })
+  @Column({ length: 255, unique: true })
   reportNumber: string
 
   @Column()
@@ -26,4 +27,8 @@ export class Inspection extends AbstractEntity {
 
   @Column({ length: 5 })
   hmInspection: string
+
+  @ManyToMany(() => Vehicle, vehicle => vehicle.inspections)
+  @JoinTable({ name: 'inspections_vehicles' })
+  vehicles: Vehicle[]
 }
