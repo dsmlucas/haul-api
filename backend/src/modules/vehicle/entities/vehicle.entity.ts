@@ -2,6 +2,7 @@ import { Column, Entity, Index, ManyToMany } from 'typeorm'
 
 import { AbstractEntity } from '~/common/abstract.entity'
 import { Inspection } from '~/modules/inspection/entities/inspection.entity'
+import { VehicleAdditionalInfo } from '~/modules/vehicle/entities/vehicle.interface'
 
 export enum VehicleType {
   TRUCK_TRACTOR = 'Truck Tractor',
@@ -35,4 +36,6 @@ export class Vehicle extends AbstractEntity {
 
   @ManyToMany(() => Inspection, inspection => inspection.vehicles)
   inspections: Inspection[]
+
+  additionalInfo?: VehicleAdditionalInfo
 }

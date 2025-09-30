@@ -29,8 +29,8 @@ export abstract class BaseService<T> {
   ): Promise<PaginatedList<T>> {
     try {
       const results = await this.repository.find({
-        skip: filters.skip,
-        take: filters.limit,
+        skip: filters?.skip,
+        take: filters?.limit,
         relations,
       })
 

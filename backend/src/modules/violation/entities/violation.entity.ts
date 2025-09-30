@@ -1,6 +1,7 @@
-import { Column, Entity, Index } from 'typeorm'
+import { Column, Entity, Index, ManyToMany } from 'typeorm'
 
 import { AbstractEntity } from '~/common/abstract.entity'
+import { Inspection } from '~/modules/inspection/entities/inspection.entity'
 
 @Entity({ name: 'violations' })
 @Index(['oos', 'unit'])
@@ -27,4 +28,7 @@ export class Violation extends AbstractEntity {
 
   @Column({ length: 1 })
   convictedDifCharge: string
+
+  @ManyToMany(() => Inspection, inspection => inspection.violations)
+  inspections: Inspection[]
 }

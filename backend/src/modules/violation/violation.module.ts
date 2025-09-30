@@ -9,5 +9,6 @@ import { ViolationService } from './violation.service'
   imports: [TypeOrmModule.forFeature([Violation])],
   controllers: [],
   providers: [ViolationService],
+  exports: [ViolationService],
 })
 export class ViolationModule {}

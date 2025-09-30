@@ -11,7 +11,7 @@ export class AddManyToManyVehiclesInspections1759081573619
         "inspections_id" uuid NOT NULL,
         "vehicles_id" uuid NOT NULL,
         CONSTRAINT "PK_1f432fc60917d48fed8d2ac50e2" PRIMARY KEY ("inspections_id", "vehicles_id")
-    )`,
+      )`,
     )
     await queryRunner.query(
       `CREATE INDEX "IDX_19f1743a5402efde6ebc246889" ON "inspections_vehicles" ("inspections_id") `,

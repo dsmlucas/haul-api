@@ -26,7 +26,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: 'migrations',
       subscribers: [],
       migrationsRun: true,
-      logging: true,
       namingStrategy: new SnakeNamingStrategy(),
     }
   }

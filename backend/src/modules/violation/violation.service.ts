@@ -13,4 +13,17 @@ export class ViolationService extends BaseService<Violation> {
   ) {
     super(violationRepository)
   }
+
+  async findOrCreate(vehicle: Violation): Promise<Violation> {
+    let entity = await this.violationRepository.findOneBy({
+      code: vehicle.code,
+    })
+
+    if (!entity) {
+      entity = await this.create(vehicle)
+      return entity
+    }
+
+    return entity
+  }
 }

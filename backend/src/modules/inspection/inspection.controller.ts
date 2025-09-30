@@ -1,20 +1,21 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   Param,
   Post,
-  Put,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 
+import { PaginatedList } from '~/@types/pagination'
 import { XmlValidationPipe } from '~/common/pipes/xml-validation.pipe'
 import { multerOptions } from '~/config/multer.config'
+import { InspectionFilterDto } from '~/modules/inspection/dto/inspection-filter.dto'
+import { Inspection } from '~/modules/inspection/entities/inspection.entity'
 
-import { UpdateInspectionDto } from './dto/update-inspection.dto'
 import { InspectionService } from './inspection.service'
 
 @Controller('inspections')
@@ -24,12 +25,22 @@ export class InspectionController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async upload(@UploadedFile(XmlValidationPipe) file: Express.Multer.File) {
-    return await this.inpectionService.upload(file)
+    const progress = this.inpectionService.getUploadProgress()
+
+    if (progress.total > 0) {
+      return { message: 'An upload is already in progress' }
+    }
+
+    this.inpectionService.upload(file)
+
+    return { message: 'Upload started successfully' }
   }
 
   @Get()
-  findAll() {
-    return this.inpectionService.findAll()
+  findAll(
+    @Query() filters: InspectionFilterDto,
+  ): Promise<PaginatedList<Inspection>> {
+    return this.inpectionService.findAll(filters)
   }
 
   @Get(':id')
@@ -37,16 +48,13 @@ export class InspectionController {
     return this.inpectionService.findOne(id)
   }
 
-  @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateInpectionDto: UpdateInspectionDto,
-  ) {
-    return this.inpectionService.update(id, updateInpectionDto)
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.inpectionService.remove(id)
+  }
+
+  @Get('upload/progress')
+  getUploadProgress() {
+    return this.inpectionService.getUploadProgress()
   }
 }

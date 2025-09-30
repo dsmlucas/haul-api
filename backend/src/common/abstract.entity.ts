@@ -45,14 +45,16 @@ export abstract class AbstractEntity {
   static toDtos<T extends AbstractEntity>(
     entities: T[],
     pagination: PaginationDto,
+    totalCount?: number,
   ): PaginatedList<T> {
     const instances = entities.map(entity => instanceToInstance(entity))
+    const total = totalCount || entities.length
 
     const payload: PaginatedList<T> = {
       data: instances,
       pagination: {
-        totalCount: entities.length,
-        totalPages: Math.ceil(entities.length / pagination.limit),
+        totalCount: total,
+        totalPages: Math.ceil(total / pagination.limit),
         currentPage: pagination.page,
         pageSize: pagination.limit,
       },

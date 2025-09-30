@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinTable, ManyToMany } from 'typeorm'
 
 import { AbstractEntity } from '~/common/abstract.entity'
 import { Vehicle } from '~/modules/vehicle/entities/vehicle.entity'
+import { Violation } from '~/modules/violation/entities/violation.entity'
 
 @Entity({ name: 'inspections' })
 @Index(['inspectionDate'])
@@ -31,4 +32,8 @@ export class Inspection extends AbstractEntity {
   @ManyToMany(() => Vehicle, vehicle => vehicle.inspections)
   @JoinTable({ name: 'inspections_vehicles' })
   vehicles: Vehicle[]
+
+  @ManyToMany(() => Violation, violation => violation.inspections)
+  @JoinTable({ name: 'inspections_violations' })
+  violations: Violation[]
 }

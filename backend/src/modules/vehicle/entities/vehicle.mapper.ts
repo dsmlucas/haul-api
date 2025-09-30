@@ -1,8 +1,8 @@
+import { Vehicle, VehicleType } from '~/modules/vehicle/entities/vehicle.entity'
 import {
   IVehicle,
   IVehicleBlock,
-} from '~/modules/inspection/inspection.interface'
-import { Vehicle, VehicleType } from '~/modules/vehicle/entities/vehicle.entity'
+} from '~/modules/vehicle/entities/vehicle.interface'
 
 export class VehicleMapper {
   static toEntity(vehicle: IVehicle): Vehicle {
