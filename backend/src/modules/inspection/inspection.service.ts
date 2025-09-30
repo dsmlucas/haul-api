@@ -44,10 +44,6 @@ export class InspectionService extends BaseService<Inspection> {
           ? rawInspections.length
           : 0
 
-      // TODO: implement crashes and serious violations
-      // const crashes = xmlData?.carrierData?.crashes?.crash
-      // const seriousViolations = xmlData?.carrierData?.serious_violations
-
       const vehicleMap: Map<string, string> = new Map()
       const violationMap: Map<string, string> = new Map()
 

@@ -1,0 +1,83 @@
+:root {
+  --base-bg-color-1: #223348;
+  --base-bg-color-2: #2c3d52;
+
+  --header-text-color: #f5f9ff;
+  --primary-text-color: #d7e0ec;
+  --secondary-text-color: #a2b1c7;
+  --tertiary-text-color: #7588a0;
+  --button-text-color: #ffffff;
+  --disabled-text-color: #53667f;
+  --icon-color: #8b9cb3;
+}
+
+.app {
+  padding: 5% 64px;
+  background-color: var(--base-bg-color-1);
+  min-height: 100vh;
+  color: #92929b;
+
+  h2 {
+    color: var(--header-text-color);
+  }
+
+  h3 {
+    color: var(--primary-text-color);
+  }
+
+  .box {
+    flex-grow: 1;
+    background-color: var(--base-bg-color-2);
+    border: 1px solid var(--disabled-text-color);
+    border-radius: 8px;
+    padding: 16px 32px;
+  }
+
+  nav {
+    color: var(--secondary-text-color);
+    a,
+    p {
+      color: var(--secondary-text-color);
+    }
+  }
+
+  table {
+    background-color: var(--base-bg-color-2);
+
+    th {
+      color: var(--primary-text-color);
+      background-color: var(--disabled-text-color);
+      font-weight: 700;
+      border-bottom: 1px solid var(--tertiary-text-color);
+    }
+
+    td {
+      color: var(--secondary-text-color);
+      border-bottom: 1px solid var(--tertiary-text-color);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .MuiTableRow-hover:hover {
+      background-color: var(--disabled-text-color);
+    }
+  }
+
+  .table-pagination-footer {
+    background-color: var(--base-bg-color-2);
+    color: var(--secondary-text-color);
+    border-radius: 0 0 8px 8px;
+  }
+
+  button:disabled {
+    svg {
+      color: var(--disabled-text-color) !important;
+    }
+  }
+
+  svg {
+    color: var(--secondary-text-color);
+  }
+}
