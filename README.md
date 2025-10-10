@@ -40,8 +40,8 @@ The system consists of a **NestJS backend** that handles XML parsing, database p
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/dsmlucas/inspections-app.git
-cd inspections-app
+git clone https://github.com/dsmlucas/haul-api.git
+cd haul-api
 ```
 
 ### 2. Start with Docker
