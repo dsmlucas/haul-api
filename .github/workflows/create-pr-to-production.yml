@@ -24,6 +24,7 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: ${{ env.DESTINATION_BRANCH }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: "Deploy to Production"
           pr_draft: true
           pr_allow_empty: false
