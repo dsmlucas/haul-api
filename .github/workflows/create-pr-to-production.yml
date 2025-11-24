@@ -17,12 +17,9 @@ permissions:
 jobs:
   create-pull-request:
     name: Create pull request to production
-    runs-on:
-      - ubuntu-latest
-    container:
-      image: docker:19.03-git
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: pull-request
         uses: repo-sync/pull-request@v2
