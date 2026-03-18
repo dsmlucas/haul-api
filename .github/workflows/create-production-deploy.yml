@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - staging
-      
+
   workflow_dispatch:
 
 env:
-  SOURCE_BRANCH: staging
-  TARGET_BRANCH: main
+  SOURCE_BRANCH: main
+  TARGET_BRANCH: staging
   PR_TITLE: "Deploy to Production"
 
 permissions:
