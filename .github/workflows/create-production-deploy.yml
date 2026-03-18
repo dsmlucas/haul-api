@@ -1,0 +1,118 @@
+name: Create Production Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+env:
+  SOURCE_BRANCH: main
+  TARGET_BRANCH: staging
+  PR_TITLE: "Deploy to Production"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  create-or-update-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout with full history so diff works ──────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── 2. Check if source branch differs from target branch ───────────────────────────
+      - name: Check diff between branches
+        id: diff
+        run: |
+          git fetch origin ${{ env.TARGET_BRANCH }}
+          DIFF=$(git diff origin/${{ env.TARGET_BRANCH }}..origin/${{ env.SOURCE_BRANCH }} --name-only)
+          if [ -z "$DIFF" ]; then
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+            echo "No differences found — skipping PR step."
+          else
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
+            echo "Differences detected:"
+            echo "$DIFF"
+          fi
+
+      # ── 3. Resolve the merged PR number that triggered this push ─────────────
+      - name: Get merged PR number
+        id: pr_info
+        if: steps.diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Find the PR that was merged into the source branch in this push
+          PR_NUMBER=$(gh pr list \
+            --base ${{ env.SOURCE_BRANCH }} \
+            --state merged \
+            --limit 5 \
+            --json number,mergedAt \
+            --jq 'sort_by(.mergedAt) | last | .number')
+
+          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "Triggered by PR #${PR_NUMBER}"
+
+      # ── 4. Create or update the PR ───────────────────────────────
+      - name: Create or update PR
+        if: steps.diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_PR: ${{ steps.pr_info.outputs.pr_number }}
+        run: |
+          EXISTING_PR=$(gh pr list \
+            --base ${{ env.TARGET_BRANCH }} \
+            --head ${{ env.SOURCE_BRANCH }} \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -z "$EXISTING_PR" ]; then
+            echo "No open PR found — creating a new one."
+
+            BODY=$(cat <<EOF
+          ## 🚀 ${{ env.PR_TITLE }}
+
+          This PR was automatically generated after changes were merged into \`${{ env.SOURCE_BRANCH }}\`.
+
+          ---
+
+          ### 📋 Merged Pull Requests
+
+          - #${NEW_PR}
+
+          ---
+
+          > 🤖 _This PR is maintained automatically. Do **not** close it manually unless you want to cancel the deploy._
+          EOF
+          )
+
+            gh pr create \
+              --base ${{ env.TARGET_BRANCH }} \
+              --head ${{ env.SOURCE_BRANCH }} \
+              --title "${{ env.PR_TITLE }}" \
+              --body "$BODY"
+
+          else
+            echo "Existing PR #${EXISTING_PR} found — updating PR list."
+
+            CURRENT_BODY=$(gh pr view "$EXISTING_PR" --json body --jq '.body')
+
+            # Append the new PR entry to the list if not already present
+            if echo "$CURRENT_BODY" | grep -q "#${NEW_PR}"; then
+              echo "PR #${NEW_PR} is already listed — skipping update."
+            else
+              UPDATED_BODY=$(echo "$CURRENT_BODY" | sed \
+                "s~### 📋 Merged Pull Requests~### 📋 Merged Pull Requests\n\n- #${NEW_PR}~")
+
+              gh pr edit "$EXISTING_PR" --body "$UPDATED_BODY"
+              echo "PR #${EXISTING_PR} updated with new entry #${NEW_PR}."
+            fi
+          fi
