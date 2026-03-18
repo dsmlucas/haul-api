@@ -86,17 +86,7 @@ jobs:
 
           ### 📋 Merged Pull Requests
 
-          | PR | Description |
-          |----|-------------|
-          | #${NEW_PR} | _(fill in or auto-populated below)_ |
-
-          ---
-
-          ### ✅ Pre-deploy Checklist
-
-          - [ ] All checks are passing
-          - [ ] Staging has been validated
-          - [ ] Relevant stakeholders have been notified
+          - #${NEW_PR}
 
           ---
 
@@ -115,18 +105,12 @@ jobs:
 
             CURRENT_BODY=$(gh pr view "$EXISTING_PR" --json body --jq '.body')
 
-            # Append the new PR entry to the table if not already present
+            # Append the new PR entry to the list if not already present
             if echo "$CURRENT_BODY" | grep -q "#${NEW_PR}"; then
               echo "PR #${NEW_PR} is already listed — skipping update."
             else
               UPDATED_BODY=$(echo "$CURRENT_BODY" | sed \
-                "s~| #\([0-9]*\) | _(fill in or auto-populated below)_ |~| #\1 | _(fill in or auto-populated below)_ |\n| #${NEW_PR} | _(fill in or auto-populated below)_ |~")
-
-              # Fallback: if sed didn't match the placeholder row, append before the closing divider
-              if [ "$UPDATED_BODY" = "$CURRENT_BODY" ]; then
-                UPDATED_BODY=$(echo "$CURRENT_BODY" | sed \
-                  "s~---\n\n### ✅~| #${NEW_PR} | _(fill in or auto-populated below)_ |\n\n---\n\n### ✅~")
-              fi
+                "s~### 📋 Merged Pull Requests~### 📋 Merged Pull Requests\n\n- #${NEW_PR}~")
 
               gh pr edit "$EXISTING_PR" --body "$UPDATED_BODY"
               echo "PR #${EXISTING_PR} updated with new entry #${NEW_PR}."
